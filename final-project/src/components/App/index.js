@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useState } from 'react'
 import MapContainer from "../Marker/marker"
+import Home from '../Marker/indexForYT'
 //import { useRef } from 'react'
-//import { GoogleMap,Marker, mapOptions,coordinates } from '@react-google-maps/api'
 
 
 
@@ -28,8 +28,7 @@ const App = () => {
     // rif. https://developers.google.com/maps/documentation/javascript/reference?hl=it
   
 
-  const API_KEY = 'AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY'
-  //process.env.REACT_APP_OPEN_WEATHER_API_KEY
+  const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
   const [searchPrompt, setPrompt] = useState('')
   const [map, setMap] = useState('')
@@ -50,10 +49,10 @@ const App = () => {
       inputtype=textquery&
       locationbias=circle%3A2000%40-37.81218719482422%2C144.96229553222656&
       key=${API_KEY}`, 
-  /*     {
+    /* {
       method: "GET",
      mode: "no-cors"
-    } */
+    }  */
     )
       .then((data) => {
         console.log(data.body)
@@ -110,9 +109,12 @@ const App = () => {
       <p>This input is {searchPrompt}</p>
       <p>The output info should be {map}   --- Can make it into a to-do list item </p>
       <br />
+      <p>{API_KEY}</p>
       <p>This is the Melbourne CBD map---to make markers here</p>
 
       <br />
+
+     {/*  
       <iframe
         title="Melboure CBD map"
         width="600"
@@ -123,11 +125,15 @@ const App = () => {
         referrerpolicy="no-referrer-when-downgrade"
         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY
     &q=Melbourne 3000">
-      </iframe>
+      </iframe>*/}
       <br />
       <p>Test for Marker</p>
-      <MapContainer />
+      <MapContainer /> 
 
+
+   {/*    <p>try youtube tutorial</p>
+      <Home />
+ */}
   {/*     {mapReady && <div>Map is ready. See for logs in developer console.</div>}
       <GoogleMap
         apiKey=""
