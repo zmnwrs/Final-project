@@ -1,27 +1,63 @@
-import React from 'react'
+import React from "react";
 
-import IntroSection from './components/intro/Intro'
-import ContactSection from './components/contact-section/ContactSection'
-import MapSection from './components/map/Map' // import the map here
-import DisclaimerSection from './components/disclaimer/Disclaimer'
-import FooterSection from './components/footer/Footer'
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 
-import './app.css'
+let coords = [];
 
-const location = {
-  address: '1600 Amphitheatre Parkway, Mountain View, california.',
-  lat: 37.42216,
-  lng: -122.08427,
-} // our location object from earlier
+class Map extends React.Component {
+  state = {
+    center: { lat: -33.867, lng: 151.195 },
+    coordsResult: []
+  };
 
-const App = () => (
-  <div className="App">
-    <IntroSection />
-    <ContactSection />
-    <MapSection location={location} zoomLevel={17} /> {/* include it here */}
-    <DisclaimerSection />
-    <FooterSection />
-  </div>
-)
+  onMapLoad = map => {
+    let request = {
+      query: "Museum of Contemporary Art Australia",
+      fields: ["name", "geometry"]
+    };
 
-export default App
+    let service = new google.maps.places.PlacesService(map);
+
+    service.findPlaceFromQuery(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          coords.push(results[i]);
+        }
+
+        this.setState({
+          center: results[0].geometry.location,
+          coordsResult: coords
+        });
+      }
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <GoogleMap
+          center={this.state.center}
+          zoom={13}
+          onLoad={map => this.onMapLoad(map)}
+          mapContainerStyle={{ height: "400px", width: "800px" }}
+        >
+          {this.state.coordsResult !== [] &&
+            this.state.coordsResult.map(function (results, i) {
+              return (
+                <Marker key={i} position={results.geometry.location}>
+                  <InfoWindow
+                    options={{ maxWidth: 300 }}>
+
+                    <span>{results.name}</span>
+
+                  </InfoWindow>
+                </Marker>
+              );
+            })}
+        </GoogleMap>
+      </div>
+    );
+  }
+}
+
+export default Map;

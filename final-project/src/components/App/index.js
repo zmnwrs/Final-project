@@ -1,9 +1,32 @@
 import { useEffect } from 'react'
 import { useState } from 'react'
 import MapContainer from "../Marker/marker"
+//import { useRef } from 'react'
+//import { GoogleMap,Marker, mapOptions,coordinates } from '@react-google-maps/api'
+
 
 
 const App = () => {
+  //const mapRef = useRef(null)
+  //const [mapReady, setMapReady] = useState(false)
+
+  /**
+   * @description This function is called when the map is ready
+   * @param {Object} map - reference to the map instance
+   * @param {Object} maps - reference to the maps library
+   */
+/*   const onGoogleApiLoaded = ({ map, maps }) => {
+    mapRef.current = map
+    setMapReady(true)
+  }
+
+  const onMarkerClick = (e, { markerId, lat, lng }) => {
+    console.log('This is ->', markerId)
+ */
+    // inside the map instance you can call any google maps method
+    //mapRef.current.setCenter({ lat, lng })
+    // rif. https://developers.google.com/maps/documentation/javascript/reference?hl=it
+  
 
   const API_KEY = 'AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY'
   //process.env.REACT_APP_OPEN_WEATHER_API_KEY
@@ -21,30 +44,37 @@ const App = () => {
     fetch(
       //`https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY&&location=-37.81218719482422,144.96229553222656&radius=1500&type=restaurant$keywords=${searchPrompt}`, 
       //{ headers: { "Access-Control-Allow-Origin": "*" }, mode: 'no-cors' }
-      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&input=${searchPrompt}&inputtype=textquery&locationbias=circle%3A2000%40-37.81218719482422%2C144.96229553222656&key=${API_KEY}`, {
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?
+      fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&
+      input=${searchPrompt}&
+      inputtype=textquery&
+      locationbias=circle%3A2000%40-37.81218719482422%2C144.96229553222656&
+      key=${API_KEY}`, 
+  /*     {
       method: "GET",
-      mode: "no-cors"
-    })
-    .then((data) =>{
-      console.log(data.body)
-    })
-    // ).then((res) => res.json())
-      // .then((data) => {
-      //   console.log(data);
-      //   setSearchResult(data.candidates);
-      //   console.log(searchResult)
-      //   setMap(data.candidates.formatted_address)
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // })
+     mode: "no-cors"
+    } */
+    )
+      .then((data) => {
+        console.log(data.body)
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setSearchResult(data.candidates);
+        console.log(searchResult)
+        setMap(data.candidates.formatted_address)
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
   useEffect(() => {
-    //fetchMap()
-    initmap()
+    fetchMap()
+    //initmap()
   }, [fetchMap])
 
-  const initmap = () => {
+  /* const initmap = () => {
     var sydney = new google.maps.LatLng(-33.867, 151.195);
   
     infowindow = new google.maps.InfoWindow();
@@ -67,8 +97,8 @@ const App = () => {
         map.setCenter(results[0].geometry.location);
       }
     });
-    setMap(map)
-  }
+    
+  } */
 
   return (
     <>
@@ -97,8 +127,38 @@ const App = () => {
       <br />
       <p>Test for Marker</p>
       <MapContainer />
+
+  {/*     {mapReady && <div>Map is ready. See for logs in developer console.</div>}
+      <GoogleMap
+        apiKey=""
+        defaultCenter={{ lat: 45.4046987, lng: 12.2472504 }}
+        defaultZoom={5}
+        options={mapOptions}
+        mapMinHeight="100vh"
+        onGoogleApiLoaded={onGoogleApiLoaded}
+        onChange={(map) => console.log('Map moved', map)}
+      >
+        {coordinates.map(({ lat, lng, name }, index) => (
+          <Marker
+            key={index}
+            lat={lat}
+            lng={lng}
+            markerId={name}
+            onClick={onMarkerClick}
+            // draggable={true}
+            // onDragStart={(e, { latLng }) => {}}
+            // onDrag={(e, { latLng }) => {}}
+            // onDragEnd={(e, { latLng }) => {}}
+          />
+        ))}
+      </GoogleMap> */}
     </>
   )
 }
 
-export default App;
+export default App
+
+
+
+
+
