@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import MapContainer from "../Marker/marker"
 import Home from '../Marker/indexForYT'
+import Map from '../Map/map'
 //import { useRef } from 'react'
 
 
@@ -39,39 +40,125 @@ const App = () => {
     setPrompt(e.target.value)
   }
 
-  const fetchMap = () => {
-    fetch(
-      //`https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY&&location=-37.81218719482422,144.96229553222656&radius=1500&type=restaurant$keywords=${searchPrompt}`, 
-      //{ headers: { "Access-Control-Allow-Origin": "*" }, mode: 'no-cors' }
-      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?
-      fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&
-      input=${searchPrompt}&
-      inputtype=textquery&
-      locationbias=circle%3A2000%40-37.81218719482422%2C144.96229553222656&
-      key=${API_KEY}`, 
-    /* {
-      method: "GET",
-     mode: "no-cors"
-    }  */
-    )
-      .then((data) => {
-        console.log(data.body)
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setSearchResult(data.candidates);
-        console.log(searchResult)
-        setMap(data.candidates.formatted_address)
-      })
-      .catch(error => {
-        console.log(error);
-      })
+  function initMap2() {
+    const map = new window.google.maps.Map(document.getElementById("map"), {
+      center: { lat: -33.8688, lng: 151.2195 },
+      zoom: 13,
+    });
+    
+    const service = new window.google.maps.places.PlacesService(map);
+    
+    // Search for places by name
+    const request = {
+      query: searchPrompt, // Replace with the name of the place you're searching for
+      fields: ["name", "geometry"],
+    };
+    
+    // Perform the search
+    service.findPlaceFromQuery(request, (results, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        const place = results[0];
+        const location = place.geometry.location;
+        console.log("Place Name:", place.name);
+        console.log("Latitude:", location.lat());
+        console.log("Longitude:", location.lng());
+      }
+    });
   }
-  useEffect(() => {
-    fetchMap()
-    //initmap()
-  }, [fetchMap])
+
+  const fetchMap = () => {
+
+    return(<script>
+      initMap2();
+    </script>)
+
+    // let state = {
+    //   center: { lat: -33.867, lng: 151.195 },
+    //   coordsResult: []
+    // };
+  
+      // let request = {
+      //   query: searchPrompt,
+      //   fields: ["name", "geometry"]
+      // };
+  
+      // let service = new window.google.maps.places.PlacesService(map);
+  
+      // service.findPlaceFromQuery(request, (results, status) => {
+      //   if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+      //     for (var i = 0; i < results.length; i++) {
+      //       console.log("results1",results[i])
+      //       //coords.push(results[i]);
+      //     }
+  
+      //     // this.setState({
+      //     //   center: results[0].geometry.location,
+      //     //   coordsResult: coords
+      //     // });
+      //   }
+      // });
+    // fetch(
+    //   //`https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY&&location=-37.81218719482422,144.96229553222656&radius=1500&type=restaurant$keywords=${searchPrompt}`, 
+    //   //{ headers: { "Access-Control-Allow-Origin": "*" }, mode: 'no-cors' }
+    //   `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?
+    //   fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&
+    //   input=${searchPrompt}&
+    //   inputtype=textquery&
+    //   locationbias=circle%3A2000%40-37.81218719482422%2C144.96229553222656&
+    //   key=${API_KEY}`, 
+    // /* {
+    //   method: "GET",
+    //  mode: "no-cors"
+    // }  */
+    // )
+    //   .then((data) => {
+    //     console.log(data.body)
+    //   })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     setSearchResult(data.candidates);
+    //     console.log(searchResult)
+    //     setMap(data.candidates.formatted_address)
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
+  }
+  // useEffect(() => {
+  //   //fetchMap()
+  //   //initmap()
+  // }, [fetchMap])
+
+  let map2;
+  let service;
+  let infowindow;
+
+  const initMap = () => {
+    // const sydney = new window.google.maps.LatLng(-33.867, 151.195);
+  
+    // infowindow = new window.google.maps.InfoWindow();
+  
+    // map2 = new window.google.maps.Map(
+    //     document.getElementById('map'), {center: sydney, zoom: 15});
+  
+    // const request = {
+    //   query: 'coco',
+    //   fields: ['name', 'geometry'],
+    // };
+  
+    // service = new window.google.maps.places.PlacesService(map2);
+  
+    // service.findPlaceFromQuery(request, function(results, status) {
+    //   if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+    //     for (var i = 0; i < results.length; i++) {
+    //       console.log("result",results[i])
+    //       // createMarker(results[i]);
+    //     }
+    //     map.setCenter(results[0].geometry.location);
+    //   }
+    // });
+  }
 
   /* const initmap = () => {
     var sydney = new google.maps.LatLng(-33.867, 151.195);
@@ -99,8 +186,19 @@ const App = () => {
     
   } */
 
+
+  const emptyInit = () =>{
+    console.log("searchPrompt")
+
+  }
+
   return (
     <>
+
+    <script async
+    //src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY&libraries=places&callback=emptyInit">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY&libraries=places">
+    </script>
       <p>Rei Wang - Meals to try</p>
       <input placeholder="Find a restaurant " type='text' value={searchPrompt} onChange={handleChange} />
       <button onClick={fetchMap}>Find a restaurant</button>
@@ -126,9 +224,11 @@ const App = () => {
         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCUq9TdIsCUNEYgfZB2AmQm2jjwbgPsJXY
     &q=Melbourne 3000">
       </iframe>*/}
-      <br />
+      {/* <br />
       <p>Test for Marker</p>
       <MapContainer /> 
+      <p>Test for Marker2</p> */}
+      <Map />
 
 
    {/*    <p>try youtube tutorial</p>

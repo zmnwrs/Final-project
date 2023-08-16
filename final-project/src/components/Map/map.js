@@ -12,15 +12,21 @@ class Map extends React.Component {
 
   onMapLoad = map => {
     let request = {
-      query: "Museum of Contemporary Art Australia",
+      query: "Melbourne Museume",
       fields: ["name", "geometry"]
     };
 
-    let service = new google.maps.places.PlacesService(map);
+    let service = new window.google.maps.places.PlacesService(map);
 
     service.findPlaceFromQuery(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
+          console.log("results",results[i])
+          const location = results[i].geometry.location;
+        console.log("Place Name:", results[i].name);
+        console.log("Place location:", location);
+        console.log("Latitude:", location.lat());
+        console.log("Longitude:", location.lng());
           coords.push(results[i]);
         }
 
@@ -46,7 +52,10 @@ class Map extends React.Component {
               return (
                 <Marker key={i} position={results.geometry.location}>
                   <InfoWindow
-                    options={{ maxWidth: 300 }}>
+                    options={{ maxWidth: 300 }}
+                    position={results.geometry.location}
+                    >
+
 
                     <span>{results.name}</span>
 
