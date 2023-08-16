@@ -11,10 +11,10 @@ const center = {
   lng: 144.96229553222656,
 };
 
- const customMarkerIcon = {
+ /* const customMarkerIcon = {
   url: 'https://www.flaticon.com/free-icon/location_2775994', 
   scaledSize: new window.google.maps.Size(50, 50), // Set the size of the image
-};
+}; */
  
 const MapContainer = () => {
   return (
@@ -23,7 +23,7 @@ const MapContainer = () => {
         <Marker
           position={center}
           title="Marker Title"
-           icon={customMarkerIcon}
+           //icon={customMarkerIcon}
         />
       </GoogleMap>
     </LoadScript>
